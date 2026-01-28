@@ -20,6 +20,7 @@ class SingleScoreboardScreen extends StatefulWidget {
   State<SingleScoreboardScreen> createState() => _SingleScoreboardScreenState();
 }
 
+// BURAYI DÜZELTTİK: Sınıf ismi artık yukarıdakiyle aynı
 class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
   final List<ScrollController> _controllers = List.generate(
     4,
@@ -32,7 +33,7 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
 
   bool get isGameOver => currentRound > widget.totalRounds;
 
-  // ZAR ATMA FONKSİYONU
+  // ZAR ATMA FONKSİYONU - ARTIK ÇALIŞIYOR
   void _rollDice() {
     int d1 = Random().nextInt(6) + 1;
     int d2 = Random().nextInt(6) + 1;
@@ -41,12 +42,13 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
         content: Text(
           "🎲 ZAR SONUCU: $d1 - $d2",
           textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        duration: const Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 2000),
         backgroundColor: Colors.deepPurple,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(bottom: 100, left: 50, right: 50),
+        margin: const EdgeInsets.only(bottom: 120, left: 50, right: 50),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -80,7 +82,10 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
             const SizedBox(height: 20),
             ...List.generate(
               4,
-              (i) => Text("${widget.playerNames[i]}: ${totals[i]}"),
+              (i) => Text(
+                "${widget.playerNames[i]}: ${totals[i]}",
+                style: const TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),
@@ -89,7 +94,10 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
             children: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("SONUÇLARI İNCELE"),
+                child: const Text(
+                  "SONUÇLARI İNCELE",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               ElevatedButton(
                 onPressed: () =>
@@ -130,8 +138,9 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
           children: [
             Text(
               "EL: $currentRound PUAN GİRİŞİ",
-              style: const TextStyle(fontWeight: FontWeight.w900),
+              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
             ),
+            const SizedBox(height: 10),
             ...List.generate(
               4,
               (i) => Padding(
@@ -152,9 +161,8 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
                 setState(() {
                   for (int i = 0; i < 4; i++) {
                     int s = int.tryParse(ctrls[i].text) ?? 0;
-                    pHistory[i].add(
-                      s + pCurrentPenalties[i].fold(0, (a, b) => a + b),
-                    );
+                    int p = pCurrentPenalties[i].fold(0, (a, b) => a + b);
+                    pHistory[i].add(s + p);
                     pCurrentPenalties[i].clear();
                   }
                   if (currentRound >= widget.totalRounds) {
@@ -179,7 +187,10 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
               ),
               child: const Text(
                 "KAYDET",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -189,7 +200,6 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
     );
   }
 
-  // CEZA SİSTEMİ
   void _addPenalty(int idx, int val) {
     if (!isGameOver) {
       setState(() {
@@ -215,7 +225,7 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Puan Gir"),
+        title: const Text("Miktar Gir"),
         content: TextField(
           controller: ctrl,
           keyboardType: const TextInputType.numberWithOptions(signed: true),
@@ -270,6 +280,7 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
               _showCustomInput(idx);
             },
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -415,19 +426,17 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
                         ),
                       ),
                     ),
-                    // DÜZELTİLEN GRİ ŞERİT
+                    // YARIM KALAN YAZI BURADA DÜZELTİLDİ
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ), // Yükseklik artırıldı
-                      color: Colors.black12,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      color: Colors.grey[300],
                       child: Text(
                         "EL: ${isGameOver ? widget.totalRounds : currentRound} / ${widget.totalRounds}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -435,7 +444,7 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 160), // Butonlar için boşluk
+            const SizedBox(height: 160),
           ],
         ),
       ),
