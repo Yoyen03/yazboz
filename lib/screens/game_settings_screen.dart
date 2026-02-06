@@ -171,7 +171,9 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       }
     },
     style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.orange[800],
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.deepOrange[900]
+          : Colors.orange[800],
       minimumSize: const Size(
         double.infinity,
         65,
@@ -203,94 +205,103 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
     ),
   );
 
-  Widget _buildRoundCard() => Card(
-    elevation: 4,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.green[50],
-              borderRadius: BorderRadius.circular(12),
+  Widget _buildRoundCard() {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Card(
+      elevation: 4,
+      color: isDark ? const Color(0xFF1E1E1E) : null,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.green[900] : Colors.green[50],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                "${_totalRounds.toInt()}",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.green[300] : Colors.green[800],
+                ),
+              ),
             ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Slider(
+                value: _totalRounds,
+                min: 1,
+                max: 15,
+                divisions: 14,
+                activeColor: Colors.orange[800],
+                onChanged: (v) => setState(() => _totalRounds = v),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputRule(String t, TextEditingController c) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF1E1E1E)
+            : Colors.white.withOpacity(0.95),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
             child: Text(
-              "${_totalRounds.toInt()}",
+              t,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.green[800],
+                color: isDark ? Colors.white : Colors.black87,
               ),
             ),
           ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Slider(
-              value: _totalRounds,
-              min: 1,
-              max: 15,
-              divisions: 14,
-              activeColor: Colors.orange[800],
-              onChanged: (v) => setState(() => _totalRounds = v),
+          SizedBox(
+            width: 90,
+            child: TextField(
+              controller: c,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: isDark ? Colors.green[300] : Colors.green,
+              ),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                filled: true,
+                fillColor: isDark ? Colors.green[900] : Colors.green[50],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
           ),
         ],
       ),
-    ),
-  );
-
-  Widget _buildInputRule(String t, TextEditingController c) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.95),
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.1),
-          blurRadius: 8,
-          offset: const Offset(0, 4),
-        ),
-      ],
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            t,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 90,
-          child: TextField(
-            controller: c,
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.green,
-            ),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
-              filled: true,
-              fillColor: Colors.green[50],
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+    );
+  }
 }

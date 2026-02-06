@@ -65,10 +65,12 @@ class _SinglePlayerEntryScreenState extends State<SinglePlayerEntryScreen> {
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        4,
-                        (index) => Card(
+                      children: List.generate(4, (index) {
+                        bool isDark =
+                            Theme.of(context).brightness == Brightness.dark;
+                        return Card(
                           elevation: 5,
+                          color: isDark ? const Color(0xFF1E1E1E) : null,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -77,42 +79,69 @@ class _SinglePlayerEntryScreenState extends State<SinglePlayerEntryScreen> {
                             child: TextField(
                               controller: _players[index],
                               maxLength: 15,
+                              style: TextStyle(
+                                color: isDark ? Colors.white : Colors.black,
+                              ),
                               decoration: InputDecoration(
                                 counterText: "",
                                 icon: Icon(
                                   Icons.person,
-                                  color: Colors.green[800],
+                                  color: isDark
+                                      ? Colors.green[400]
+                                      : Colors.green[800],
                                 ),
                                 labelText: '${index + 1}. Oyuncu İsmi',
+                                labelStyle: TextStyle(
+                                  color: isDark
+                                      ? Colors.grey[400]
+                                      : Colors.grey[700],
+                                ),
                                 border: InputBorder.none,
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      if (_players.any((c) => c.text.trim().isEmpty)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Lütfen 4 oyuncu ismini de giriniz!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            backgroundColor: Colors.redAccent,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        return;
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => GameSettingsScreen(
                             isTeamGame: false,
-                            // BURASI YENİ: Oyuncu isimlerini gönderiyoruz
-                            team1Name: _players[0].text.isEmpty
-                                ? "OYUNCU 1"
-                                : _players[0].text,
-                            team2Name: _players[1].text.isEmpty
-                                ? "OYUNCU 2"
-                                : _players[1].text,
+                            team1Name: _players[0].text.trim(),
+                            team2Name: _players[1].text.trim(),
+                            player3Name: _players[2].text.trim(),
+                            player4Name: _players[3].text.trim(),
                           ),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber[800],
+                      backgroundColor:
+                          Theme.of(context).brightness == Brightness.dark
+                          ? Colors.deepOrange[900] // Matching New Game
+                          : Colors.amber[800],
                       minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),

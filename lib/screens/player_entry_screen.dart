@@ -95,24 +95,40 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: ElevatedButton(
                       onPressed: () {
+                        if (_team1.text.trim().isEmpty ||
+                            _team2.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Lütfen her iki ekip ismini de giriniz!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              backgroundColor: Colors.redAccent,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                          return;
+                        }
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => GameSettingsScreen(
                               isTeamGame: true,
-                              // BURASI YENİ: İsimleri bir sonraki sayfaya paketliyoruz
-                              team1Name: _team1.text.isEmpty
-                                  ? "1. EKİP"
-                                  : _team1.text,
-                              team2Name: _team2.text.isEmpty
-                                  ? "2. EKİP"
-                                  : _team2.text,
+                              team1Name: _team1.text.trim(),
+                              team2Name: _team2.text.trim(),
                             ),
                           ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber[800],
+                        backgroundColor:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? Colors.deepOrange[900] // Matching New Game
+                            : Colors.amber[800],
                         minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -145,8 +161,10 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
     TextEditingController p2,
     Color color,
   ) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 6,
+      color: isDark ? const Color(0xFF1E1E1E) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -161,14 +179,22 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            _input(team, "Ekip İsmi", Icons.group, color),
+            _input(team, "Ekip İsmi", Icons.group, color, isDark),
             const SizedBox(height: 10),
             Row(
               children: [
-                Expanded(child: _input(p1, "1. Oyuncu", Icons.person, color)),
+                Expanded(
+                  child: _input(p1, "1. Oyuncu", Icons.person, color, isDark),
+                ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _input(p2, "2. Oyuncu", Icons.person_outline, color),
+                  child: _input(
+                    p2,
+                    "2. Oyuncu",
+                    Icons.person_outline,
+                    color,
+                    isDark,
+                  ),
                 ),
               ],
             ),
@@ -183,18 +209,31 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
     String lbl,
     IconData icon,
     Color color,
+    bool isDark,
   ) {
     return TextField(
       controller: ctrl,
       maxLength: 15,
-      style: const TextStyle(fontSize: 14),
+      style: TextStyle(
+        fontSize: 14,
+        color: isDark ? Colors.white : Colors.black,
+      ),
       decoration: InputDecoration(
         counterText: "",
         labelText: lbl,
+        labelStyle: TextStyle(
+          color: isDark ? Colors.grey[400] : Colors.grey[700],
+        ),
         filled: true,
-        fillColor: Colors.grey[50],
+        fillColor: isDark ? Colors.grey[800] : Colors.grey[50],
         prefixIcon: Icon(icon, color: color, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: isDark ? Colors.grey[700]! : Colors.grey[400]!,
+          ),
+        ),
       ),
     );
   }
