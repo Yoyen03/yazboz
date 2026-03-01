@@ -49,10 +49,11 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
             ),
           ),
           SafeArea(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
+                  const SizedBox(height: 10),
                   const Text(
                     'Ekipleri Belirleyin',
                     style: TextStyle(
@@ -62,35 +63,32 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
                       shadows: [Shadow(color: Colors.black45, blurRadius: 10)],
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildTeamCard(
-                          "1. EKİP",
-                          _team1,
-                          _players[0],
-                          _players[1],
-                          Colors.blue[800]!,
-                        ),
-                        const Text(
-                          "VS",
-                          style: TextStyle(
-                            color: Colors.amber,
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        _buildTeamCard(
-                          "2. EKİP",
-                          _team2,
-                          _players[2],
-                          _players[3],
-                          Colors.red[800]!,
-                        ),
-                      ],
+                  const SizedBox(height: 20),
+                  _buildTeamCard(
+                    "1. EKİP",
+                    _team1,
+                    _players[0],
+                    _players[1],
+                    Colors.blue[800]!,
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "VS",
+                    style: TextStyle(
+                      color: Colors.amber,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 15),
+                  _buildTeamCard(
+                    "2. EKİP",
+                    _team2,
+                    _players[2],
+                    _players[3],
+                    Colors.red[800]!,
+                  ),
+                  const SizedBox(height: 25),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: ElevatedButton(
@@ -127,7 +125,7 @@ class _PlayerEntryScreenState extends State<PlayerEntryScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             Theme.of(context).brightness == Brightness.dark
-                            ? Colors.deepOrange[900] // Matching New Game
+                            ? Colors.deepOrange[900]
                             : Colors.amber[800],
                         minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(

@@ -252,12 +252,13 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
 
   void _scrollToBottom(ScrollController c) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (c.hasClients)
+      if (c.hasClients) {
         c.animateTo(
           c.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
+      }
     });
   }
 
@@ -278,8 +279,9 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              if (ctrl.text.isNotEmpty && ctrl.text != "-")
+              if (ctrl.text.isNotEmpty && ctrl.text != "-") {
                 _addPenalty(idx, int.parse(ctrl.text));
+              }
               Navigator.pop(context);
             },
             child: const Text("EKLE"),
@@ -675,7 +677,7 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
                             "TOPLAM",
                             style: TextStyle(
                               fontSize: 10,
-                              color: textColor.withOpacity(0.7),
+                              color: textColor.withValues(alpha: 0.7),
                             ),
                           ),
                           Text(
@@ -778,7 +780,7 @@ class _SingleScoreboardScreenState extends State<SingleScoreboardScreen> {
 }
 
 class _DiceRollDialog extends StatefulWidget {
-  const _DiceRollDialog({super.key});
+  const _DiceRollDialog();
 
   @override
   State<_DiceRollDialog> createState() => _DiceRollDialogState();

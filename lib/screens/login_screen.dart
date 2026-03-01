@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(color: const Color(0xFF1B5E20)),
                 ),
                 if (widget.isDarkMode)
-                  Container(color: Colors.black.withOpacity(0.2)),
+                  Container(color: Colors.black.withValues(alpha: 0.2)),
               ],
             ),
           ),
@@ -115,8 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: widget.isDarkMode
-                          ? Colors.grey[800]!.withOpacity(0.8)
-                          : Colors.white.withOpacity(0.8),
+                          ? Colors.grey[800]!.withValues(alpha: 0.8)
+                          : Colors.white.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     padding: const EdgeInsets.symmetric(
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Switch(
                             value: widget.isDarkMode,
                             onChanged: widget.onThemeChanged,
-                            activeColor: Colors.blue,
+                            activeThumbColor: Colors.blue,
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                           ),
@@ -330,7 +330,9 @@ class _LoginScreenState extends State<LoginScreen> {
         side: BorderSide(color: color, width: 1),
         borderRadius: BorderRadius.circular(15),
       ),
-      tileColor: widget.isDarkMode ? Colors.white.withOpacity(0.05) : null,
+      tileColor: widget.isDarkMode
+          ? Colors.white.withValues(alpha: 0.05)
+          : null,
     );
   }
 }

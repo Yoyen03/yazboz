@@ -180,7 +180,7 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       ), // Butonu biraz daha kalınlaştırdık
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       elevation: 10,
-      shadowColor: Colors.black.withOpacity(0.5),
+      shadowColor: Colors.black.withValues(alpha: 0.5),
     ),
     child: const Text(
       'OYUNU BAŞLAT',
@@ -254,11 +254,11 @@ class _GameSettingsScreenState extends State<GameSettingsScreen> {
       decoration: BoxDecoration(
         color: isDark
             ? const Color(0xFF1E1E1E)
-            : Colors.white.withOpacity(0.95),
+            : Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
